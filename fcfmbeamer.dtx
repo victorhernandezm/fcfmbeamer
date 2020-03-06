@@ -1,0 +1,641 @@
+% \iffalse\begin{macrocode}
+%<*driver>
+
+\documentclass{ltxdoc}
+\usepackage[utf8]{inputenc} % this file uses UTF-8
+\usepackage[english]{babel}
+\usepackage{tgpagella}
+\usepackage{tabularx}
+\usepackage{hologo}
+\usepackage{booktabs}
+\usepackage[scaled=0.86]{berasans}
+\usepackage[scaled=1.03]{inconsolata}
+\usepackage[resetfonts]{cmap}
+\usepackage[T1]{fontenc} % use 8bit fonts
+\emergencystretch 2dd
+\usepackage{hypdoc}
+\usepackage{microtype}
+\usepackage{ragged2e}
+
+% Making paragraphs numbered
+\makeatletter
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+            {-2.5ex\@plus -1ex \@minus -.25ex}%
+            {1.25ex \@plus .25ex}%
+            {\normalfont\normalsize\bfseries}}
+\makeatother
+\setcounter{secnumdepth}{4} % how many sectioning levels to assign
+\setcounter{tocdepth}{4}    % how many sectioning levels to show
+
+% ltxdoc class options
+\CodelineIndex
+\MakeShortVerb{|}
+\EnableCrossrefs
+\DoNotIndex{}
+\makeatletter
+\c@IndexColumns=2
+\makeatother
+
+\begin{document}
+  \RecordChanges
+  \DocInput{fcfmbeamer.dtx}
+  \PrintIndex
+  \RaggedRight
+  \PrintChanges
+\end{document}
+
+%</driver>
+%    \end{macrocode}
+%<*class>
+\NeedsTeXFormat{LaTeX2e}
+%
+% Define `\fcfmbeamer@version` and store it in the `VERSION.tex` file \fi
+{\def\fcfmbeamer@versiondef#1#2{
+  \gdef\fcfmbeamer@version@number{#1}
+  \gdef\fcfmbeamer@version@date{#2}
+  \gdef\fcfmbeamer@version{#2 #1 fcfmbeamer UCH beamer theme}}
+\fcfmbeamer@versiondef{v1.0.0.alpha}{2020/03/05}}
+% {\newwrite\f\openout\f=VERSION\write\f{\fcfmbeamer@version}\closeout\f}
+%
+% \changes{v1.1.5:1} {2016/05/18}{Added \texttt{pdfencoding} to the
+%   \textsf{hyperref} package setup. This fixes the problem with garbled
+%   characters in PDF metadata with Lua\TeX.}
+% \iffalse Use `\fcfmbeamer@version` as the PDF creator key.
+\hypersetup{%
+  pdfcreator=\fcfmbeamer@version,
+  pdfencoding=auto}
+% \fi
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \changes{v1.1.0.alpha}   {2020/03/04}{Added option for define department for a faculty.}
+% 
+% \changes{v1.0.0.alpha}   {2020/03/04}{Fork adapted for first time. Name changing and minor changes.}
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \title{The unofficial beamer theme for the typesetting of lecture presentations 
+% at Facultad de Ciencias Físicas y Matemáticas - Universidad de Chile. A fork of
+% fibeamer, beamer theme for the Masaryk University in Brno, created by Vít Novotný}
+% \author{Víctor Hernández}
+% \date{\today}
+% \maketitle
+%
+% \begin{abstract}
+% \noindent This document details the design and the implementation
+% of the \textsf{fcfmbeamer} theme for the \textsf{beamer} document
+% class. Included are technical information for anyone who wishes
+% to extend the theme with their own beamer themes as well as
+% information for ordinary users.
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{Basic usage}
+% In order to use the \textsf{fcfmbeamer} theme, insert
+% |\usetheme|\oarg{options}|{fcfmbeamer}| into the preamble of a
+% \LaTeX\ document that uses the \textsf{beamer} document class.
+% Refer to Section \ref{sec:options} for the list of available
+% \textit{options}.
+% 
+% \section{Package options}\label{sec:options}
+% \subsection{The \texttt{fonts} option}
+
+
+% \begin{macro}{\iffcfmbeamer@fonts}
+% The |fonts| option instructs the package to set up the
+% combination of the font families of Carlito, Arev, Iwona, Dsfont,
+% and DejaVu for the typesetting of text and mathematics. This
+% option is enabled by default.
+%    \begin{macrocode}
+\ProvidesPackage{fcfmbeamer/beamerthemefcfmbeamer}[\fcfmbeamer@version]
+\newif\iffcfmbeamer@fonts
+\DeclareOptionBeamer{fonts}{\fcfmbeamer@fontstrue}
+\ExecuteOptionsBeamer{fonts}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \subsection{The \texttt{nofonts} option}
+% The |nofonts| option instructs the package not to alter the
+% currently set text and mathematics font families.
+%    \begin{macrocode}
+\DeclareOptionBeamer{nofonts}{\fcfmbeamer@fontsfalse}
+%    \end{macrocode}
+% \subsection{The \texttt{microtype} option}
+% \changes{v1.0.2}{2015/11/18}{Added the opt-out \texttt{microtype
+%   option}. [VN]}
+
+
+% \begin{macro}{\iffcfmbeamer@microtype}
+% The |microtype| option instructs the package to use the
+% microtypographic extensions of modern \TeX\ engines, such as
+% \hologo{pdfTeX}, \Hologo{LuaTeX}, and (with only partial support)
+% \Hologo{XeLaTeX}. This option is enabled by default.
+%    \begin{macrocode}
+\newif\iffcfmbeamer@microtype
+\DeclareOptionBeamer{microtype}{\fcfmbeamer@microtypetrue}
+\ExecuteOptionsBeamer{microtype}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \subsection{The \texttt{nomicrotype} option}
+% The |nomicrotype| option disables the microtypographic
+% extensions. This may be necessary, if an older \TeX\ engine,
+% such as \hologo{TeX} or \hologo{eTeX}, is being used.
+%    \begin{macrocode}
+\DeclareOptionBeamer{nomicrotype}{\fcfmbeamer@microtypefalse}
+%    \end{macrocode}
+
+
+% \begin{macro}{\fcfmbeamer@university}
+% \subsection{The \texttt{university} option}
+% The \marg{\texttt{university}=identifier} option pair sets the
+% identifier of the university, at which the presentation is being
+% written, to \textit{identifier}. The \textit{identifier} is
+% stored within the |\fcfmbeamer@university| macro, whose
+% implicit value is \texttt{uch}. This value corresponds to the
+% Universidad de Chile.
+%    \begin{macrocode}
+\DeclareOptionBeamer{university}{\def\fcfmbeamer@university{#1}}
+\ExecuteOptionsBeamer{university=uch}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@faculty}
+% \subsection{The \texttt{faculty} option}
+% The \marg{\texttt{faculty}=identifier} pair sets the faculty, at
+% which the thesis is being written, to \textit{domain}. The
+% following faculty \textit{identifier}s are recognized at the
+% Universidad de Chile:
+% \begin{center}\begin{tabularx}{\textwidth}{Xc}\toprule
+%   The faculty & The \textit{domain} name \\\midrule
+%   Facultad de Ciencias Físicas y Matemáticas & \texttt{fcfm} \\
+%   Facultad de Arquitectura y Urbanismo & \texttt{fau} \\
+%   Facultad de Artes & \texttt{artes} \\
+%   Facultad de Ciencias Agronómicas & \texttt{agronomia} \\
+%   Facultad de Ciencias & \texttt{ciencias} \\
+%   Facultad de Ciencias Forestales y de la Conservación de la Naturaleza & \texttt{forestal} \\
+%   Facultad de Ciencias Químicas y Farmacéuticas & \texttt{quimica} \\
+%   Facultad de Ciencias Sociales & \texttt{facso} \\
+%   Facultad de Ciencias Veterinarias y Pecuarias & \texttt{veterinaria} \\
+%   Facultad de Derecho & \texttt{derecho} \\
+%   Facultad de Economía y Negocios & \texttt{fen} \\
+%   Facultad de Filosofía y Humanidades & \texttt{filosofia} \\
+%   Facultad de Medicina & \texttt{medicina} \\
+%   Facultad de Odontología & \texttt{odontologia} \\
+%   Instituto de Asuntos Públicos & \texttt{inap} \\
+%   Instituto de Comunicación e Imagen & \texttt{icei} \\
+%   Instituto de Estudios Internacionales & \texttt{iei} \\
+%   Instituto de Nutrición y Tecnología de los Alimentos & \texttt{inta} \\\bottomrule
+% \end{tabularx}\end{center}
+% The \textit{identifier} is stored within the |\fcfmbeamer@faculty|
+% macro, whose implicit value is \texttt{fi}.
+%    \begin{macrocode}
+\DeclareOptionBeamer{faculty}{\def\fcfmbeamer@faculty{#1}}
+\ExecuteOptionsBeamer{faculty=fcfm}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@department}
+% \subsection{The \texttt{department} option}
+% The \marg{\texttt{department}=identifier} pair sets the department, at the selected faculty.
+% Currently, only FCFM departments has been added:
+% \begin{center}\begin{tabularx}{\textwidth}{Xc}\toprule
+%   The department name \\\midrule
+%   Departamento de Astronomía & \texttt{das} \\
+%   Departamento de Ciencias de la Computación & \texttt{dcc} \\
+%   Departamento de Física & \texttt{dfi} \\
+%   Departamento de Geofísica & \texttt{dgf} \\
+%   Departamento de Geología & \texttt{geologia} \\
+%   Departamento de Ingeniería Civil & \texttt{ingcivil} \\
+%   Departamento de Ingeniería de Minas & \texttt{minas} \\
+%   Departamento de Ingeniería Eléctrica & \texttt{die} \\
+%   Departamento de Ingeniería Industrial & \texttt{dii} \\
+%   Departamento de Ingeniería Matemática & \texttt{dim} \\
+%   Departamento de Ingeniería Mecánica & \texttt{dimec} \\
+%   Departamento de Ingeniería Química, Biotecnología y Materiales & \texttt{diqbm} \\\bottomrule
+% \end{tabularx}\end{center}
+% The \textit{identifier} is stored within the |\fcfmbeamer@department|
+% macro, whose implicit value is \texttt{fi}.
+%    \begin{macrocode}
+\DeclareOptionBeamer{department}{\def\fcfmbeamer@department{#1}}
+\ExecuteOptionsBeamer{department=dii}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@locale}
+% \subsection{The \texttt{locale} option}
+% \changes{v1.1.0:1}{2015/11/24}{Added the \texttt{locale} option
+%   and the \cs{fcfmbeamer@locale} macro. [VN]}
+% The \marg{\texttt{locale}=name} pair sets the name of the main
+% locale to \textit{name}. The \textit{name} is stored within the
+% |\fcfmbeamer@locale| macro, whose implicit value is the main
+% language of either the \textsf{babel} or the \textsf{polyglossia}
+% package, or \texttt{english}, when undefined.
+%
+% With regards to the themes of the Universidad de Chile, the
+% |\fcfmbeamer@locale| macro is not used; it only provides the
+% default value to the |\fcfmbeamer@logoLocale| macro.
+%    \begin{macrocode}
+\def\fcfmbeamer@locale{%
+  % Babel / polyglossia detection
+  \ifx\languagename\undefined%
+  spanish\else\languagename\fi}
+\DeclareOptionBeamer{locale}{%
+  \def\fcfmbeamer@locale{#1}}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@logoLocale}
+% \subsection{The \texttt{logoLocale} option}
+% The \marg{\texttt{logoLocale}=name} pair sets the logo file
+% locale to \textit{name}. The \textit{name} is stored within the
+% |\fcfmbeamer@logoLocale| macro, whose implicit value is
+% |\fcfmbeamer@locale|.
+% \changes{v1.1.0:2}{2016/01/11}{Added the \texttt{logoLocale}
+%   option and the \cs{fcfmbeamer@logoLocale} macro. [VN]}
+% \begin{macrocode}
+\def\fcfmbeamer@logoLocale{\fcfmbeamer@locale}
+\DeclareOptionBeamer{logoLocale}{%
+  \def\fcfmbeamer@logoLocale{#1}}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@basePath}
+% \subsection{The \texttt{basePath} option}
+% The \marg{\texttt{basePath}=path} pair sets the \textit{path}
+% containing the package files. The \textit{path} is prepended to
+% every other path (|\fcfmbeamer@logopath| and |\fcfmbeamer@themePath|)
+% used by the package. If non-empty, the
+% \textit{path} gets normalized to \textit{path/}. The normalized
+% \textit{path} is stored within the |\fcfmbeamer@basePath| macro,
+% whose implicit value is |fcfmbeamer/|.
+%    \begin{macrocode}
+\DeclareOptionBeamer{basePath}{%
+  \ifx\fcfmbeamer@empty#1\fcfmbeamer@empty%
+    \def\fcfmbeamer@basePath{}%
+  \else%
+    \def\fcfmbeamer@basePath{#1/}%
+  \fi}
+\ExecuteOptionsBeamer{basePath=fcfmbeamer}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@subdir}
+% The |\fcfmbeamer@subdir| macro returns |/| unchanged, coerces
+% |.|, |..|, |/|\textit{path}, |./|\textit{path} and
+% |../|\textit{path} to |./|, |../|, |/|\textit{path}|/|,
+% |./|\textit{path}|/| and |../|\textit{path}|/|, respectively, and
+% prefixes any other \textit{path} with |\fcfmbeamer@basePath|. This
+% macro is used within the definition of the \texttt{themePath} and
+% \texttt{logoPath} options.
+%    \begin{macrocode}
+\def\fcfmbeamer@subdir#1#2#3#4\empty{%
+  \ifx#1\empty%           <empty> -> <basePath>
+    \fcfmbeamer@basePath
+  \else
+    \if#1/%
+      \ifx#2\empty%             / -> /
+        /%
+      \else%              /<path> -> /<path>/
+        #1#2#3#4/%
+      \fi
+    \else
+      \if#1.%
+        \ifx#2\empty%           . -> ./
+          ./%
+        \else
+          \if#2.%
+            \ifx#3\empty%      .. -> ../
+              ../%
+            \else
+              \if#3/%   ../<path> -> ../<path>/
+                ../#4/%
+              \else
+                \fcfmbeamer@basePath#1#2#3#4/%
+              \fi
+            \fi
+          \else
+            \if#2/%      ./<path> -> ./<path>/
+              ./#3#4/%
+            \else
+              \fcfmbeamer@basePath#1#2#3#4/%
+            \fi
+          \fi
+        \fi
+      \else
+        \fcfmbeamer@basePath#1#2#3#4/%
+      \fi
+    \fi
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@themePath}
+% \subsection{The \texttt{themePath} option}
+% The \marg{\texttt{themePath}=path} pair sets the \textit{path}
+% containing the theme files. The \textit{path} is normalized using
+% the |\fcfmbeamer@subdir| macro and stored within the
+% |\fcfmbeamer@stylePath| macro, whose implicit value is
+% |\fcfmbeamer@basePath theme/|. By default, this expands to
+% \texttt{fcfmbeamer/theme/}.
+%    \begin{macrocode}
+\DeclareOptionBeamer{themePath}{%
+  \def\fcfmbeamer@themePath{\fcfmbeamer@subdir#1%
+    \empty\empty\empty\empty}}
+\ExecuteOptionsBeamer{themePath=theme}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@logoPath}
+% \subsection{The \texttt{logoPath} option}
+% The \marg{\texttt{logoPath}=path} pair sets the \textit{path}
+% containing the logo files, which is used by the outer themes to
+% load the main logo. The \textit{path} is normalized using the
+% |\fcfmbeamer@subdir| macro and stored within the
+% |\fcfmbeamer@logoPath| macro, whose implicit value is
+% |\fcfmbeamer@basePath| followed by |logo/\fcfmbeamer@university| and |logo/\fcfmbeamer@faculty|. By
+% default, this expands to \texttt{fcfmbeamer/logo/uch/fcfm}.
+%    \begin{macrocode}
+\DeclareOptionBeamer{logoPath}{%
+  \def\fcfmbeamer@logoPath{\fcfmbeamer@subdir#1%
+    \empty\empty\empty\empty}}
+\ExecuteOptionsBeamer{logoPath=logo/\fcfmbeamer@university /\fcfmbeamer@faculty}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@logo}
+% \subsection{The \texttt{logo} option}
+% The \marg{\texttt{logo}=filename} pair sets the prefix of the
+% filename of the main logo to \textit{filename}. The
+% \textit{filename} is stored within the |\fcfmbeamer@logo| macro,
+% whose implicit value is
+% \changes{v1.1.0:1}{2015/11/24}{Changed the implicit value of the
+%   \cs{fcfmbeamer@logo} macro. [VN]}
+% |\fcfmbeamer@logoPath| followed by
+% \texttt{fcfmbeamer-}|\fcfmbeamer@university|\texttt{^^A
+% \discretionary{-}{-}{-}}|\fcfmbeamer@faculty|\texttt{-}^^A
+% |\fcfmbeamer@logoLocale|. By default, this expands to
+% \texttt{fcfmbeamer\discretionary{/}{/}{/}logo/fcfmbeamer-uch-fcfm-dii^^A
+% -spanish}.
+%    \begin{macrocode}
+\DeclareOptionBeamer{logo}{\def\fcfmbeamer@logo{#1}}
+\ExecuteOptionsBeamer{%
+  logo=\fcfmbeamer@logoPath fcfmbeamer-\fcfmbeamer@university-%
+    \fcfmbeamer@faculty-\fcfmbeamer@department-\fcfmbeamer@logoLocale}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@fallbackLogo}
+% \subsection{The \texttt{fallbackLogo} option}
+% \changes{v1.1.0:3}{2016/01/11}{Added the \cs{fcfmbeamer@fallbackLogo}
+%   macro. [VN]}
+% \changes{v1.1.1:1}{2016/01/14}{Added the \texttt{fallbackLogo}
+%   option. [VN]}
+% The |\fcfmbeamer@fallbackLogo| macro contains the filename of the
+% logo file to be used, if |\fcfmbeamer@logo| does not exist. The
+% implicit value of the |\fcfmbeamer@fall|\discretionary{-}{}{}^^A
+% |backLogo| macro is |\fcfmbeamer@logoPath| followed by
+% \texttt{fcfmbeamer-}|\fcfmbeamer@uni|\texttt{\discretionary{-}{}{}}^^A
+% |versity\fcfmbeamer@faculty|\texttt{-english}. By default, this
+% expands to \texttt{fcfmbeamer/logo\discretionary{/}{/}{/}fi\-bea^^A
+% mer-mu-fi-english}.
+%    \begin{macrocode}
+\DeclareOptionBeamer{fallbackLogo}{\def\fcfmbeamer@fallbackLogo{#1}}
+\ExecuteOptionsBeamer{%
+  fallbackLogo=\fcfmbeamer@logoPath fcfmbeamer-\fcfmbeamer@university-%
+    \fcfmbeamer@faculty-dii-spanish}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \section{Logic}
+% \subsection{Macros}
+
+
+% \begin{macro}{\fcfmbeamer@require}
+% The |\fcfmbeamer@require|\marg{package} macro is used to gracefully
+% load a \textit{package}. Packages that have already been loaded
+% or do not exist are ignored by the macro.
+%    \begin{macrocode}
+\def\fcfmbeamer@require#1{\IfFileExists{#1.sty}{%
+  \@ifpackageloaded{#1}{}{\RequirePackage{#1}}}{}}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@requireTheme}
+% The |\fcfmbeamer@requireTheme|\marg{class} macro is used to load a
+% \textit{class} of beamer themes. The following packages are
+% loaded, provided they exist:
+% \begin{itemize}
+%  \item\texttt{beamer}\textit{class}\texttt{themefcfmbeamer} from
+%    the |\fcfmbeamer@themePath| directory -- The base theme file. By
+%    default, this expands to \texttt{fcfmbeamer/theme/beamer}^^A
+%    \textit{class}\texttt{themefcfmbeamer}.
+%  \item\texttt{beamer}\textit{class}\texttt{themefcfmbeamer-}^^A
+%    |\fcfmbeamer@university| from the |\fcfmbeamer@themePath|^^A
+%    \discretionary{}{}{}|\fcfmbeamer@university/| directory -- The
+%    university theme file. By default, this expands to
+%    \texttt{fcfmbeamer/theme/uch/beamer}\textit{class}^^A
+%    \texttt{themefcfmbeamer-uch}.
+%  \item\texttt{beamer}\textit{class}\texttt{themefcfmbeamer-}^^A
+%    |\fcfmbeamer@university|\texttt{-}|\fcfmbeamer@faculty| from the
+%    |\fcfmbeamer@themePath\fcfmbeamer@university/| directory -- The
+%    faculty theme file. By default, this expands to \texttt{^^A
+%    fcfmbeamer/theme/uch/beamer}\textit{class}\texttt{themefcfmbeamer^^A
+%    -uch-fcfm-dii}.
+% \end{itemize}
+%    \begin{macrocode}
+\def\fcfmbeamer@requireTheme#1{%
+  \fcfmbeamer@require{\fcfmbeamer@themePath beamer#1themefcfmbeamer}
+  \fcfmbeamer@require{\fcfmbeamer@themePath\fcfmbeamer@university%
+    / \fcfmbeamer@faculty /beamer#1themefcfmbeamer-\fcfmbeamer@university-\fcfmbeamer@faculty-\fcfmbeamer@department}
+  \fcfmbeamer@require{\fcfmbeamer@themePath\fcfmbeamer@university%
+    /beamer#1themefcfmbeamer-\fcfmbeamer@university-\fcfmbeamer@faculty-\fcfmbeamer@department}}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@includeLogo}
+% \changes{v1.1.0:5}{2016/01/11}{Added the
+%   \cs{fibeamer@includeLogo} macro. [VN]}
+% The |\fcfmbeamer@includeLogo|\oarg{options} macro includes the
+% main logo into the document. If specified, the \textit{options}
+% are passed to the |\includegraphics| macro.  The
+% |\fcfmbeamer@includeLogo| macro requires the \textsf{etoolbox}
+% package to function.
+%    \begin{macrocode}
+\fcfmbeamer@require{etoolbox}
+\newcommand\fcfmbeamer@includeLogo[1][]{{
+  % See <http://tex.stackexchange.com/a/39987/70941>.
+  \patchcmd{\Gin@ii}% Make `\includegraphics` use `@fallbackLogo`.
+    {\begingroup}% <search>
+    {\begingroup\renewcommand{\@latex@error}[2]{%
+       \includegraphics[#1]\fcfmbeamer@fallbackLogo}}% <replace>
+    {}% <success>
+    {}% <failure>
+  \includegraphics[#1]\fcfmbeamer@logo}}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \begin{macro}{\fcfmbeamer@patch}
+% \changes{v1.1.2}{2016/02/19}{Added \cs{fibeamer@patch}.}
+% The |\fcfmbeamer@patch|\oarg{versions}\oarg{patch} macro expands
+% \textit{patch}, if |\fcfmbeamer|\texttt{\discretionary{@}{@}{@}}^^A
+% |version@number| (defined at the top of the file
+% \texttt{beamerthemefcfmbeamer.sty}) matches any of the
+% comma-delimited \textit{versions}. This macro enables the simple
+% deployment of version-targeted patches.
+%    \begin{macrocode}
+\def\fcfmbeamer@patch#1#2{%
+  \def\fcfmbeamer@patch@versions{#1}%
+  \def\fcfmbeamer@patch@action{#2}%
+  \def\fcfmbeamer@patch@next##1,{%
+    \def\fcfmbeamer@patch@arg{##1}%
+    \def\fcfmbeamer@patch@relax{\relax}%
+    \ifx\fcfmbeamer@patch@arg\fcfmbeamer@version@number
+      \def\fcfmbeamer@patch@next####1\relax,{}%
+      \expandafter\fcfmbeamer@patch@action
+      \expandafter\fcfmbeamer@patch@next
+    \else\ifx\fcfmbeamer@patch@arg\fcfmbeamer@patch@relax\else
+      \expandafter\expandafter\expandafter\fcfmbeamer@patch@next
+    \fi\fi}%
+  \expandafter\expandafter\expandafter\fcfmbeamer@patch@next
+  \expandafter\fcfmbeamer@patch@versions\expandafter,\relax,}
+%    \end{macrocode}
+% \end{macro}
+
+
+% \subsection{Main routine}
+% First, the theme processes the options.
+%    \begin{macrocode}
+\ProcessOptionsBeamer
+%    \end{macrocode}
+% When the |microtype| option is specified, the \textsf{microtype}
+% package gets loaded.
+%    \begin{macrocode}
+  % Set up the microtypographic extensions
+  \iffcfmbeamer@microtype
+    \RequirePackage{microtype}
+  \fi
+%    \end{macrocode}
+% When the |fonts| option is specified, the following packages will
+% be used by the package to configure the fonts in the presentation
+% mode:
+% \begin{itemize}
+%   \item\textsf{ifthen} -- This package is used to construct
+%     compound conditionals.
+%   \item\textsf{ifxetex}, \textsf{ifluatex} -- These packages are
+%     used to detect the used \TeX\ engine.
+%   \item\textsf{lmodern} -- The Latin Modern font family is used as a
+%     fallback for missing glyphs.
+%   \item\textsf{carlito} -- The Carlito font family is used as the
+%     primary text and math font face.
+%   \item\textsf{arevmath} -- The Arev Sans math font family is used for
+%     various symbols and greek alphabet.
+%   \item\textsf{iwona} -- The Iwona font family is used for large
+%     math symbols.
+%   \item\textsf{dejavu} -- The DejaVu Sans Mono font family is
+%     used for the typesetting of monospaced text.
+%   \item\textsf{setspace} -- This package is used to adjust the
+%     leading to 115 \%. Loading this package breaks any top-level
+%     footnotes without the \texttt{[frame]} optional parameter
+%     specified. This is a known bug.\footnote{See
+%       \url{http://tex.stackexchange.com/a/118005/70941}.}
+%   \item\textsf{fontenc} -- This package is used to set the font
+%     encoding to Cork. This package is only used outside the
+%     \Hologo{XeTeX} and \Hologo{LuaTeX} engines.
+%   \item\textsf{fontspec} -- This package is used to load fonts.
+%     This package is only used with the \Hologo{XeTeX} and
+%     \Hologo{LuaTeX} engines.
+% \end{itemize}
+%    \begin{macrocode}
+\mode<presentation>
+  % Set up the fonts
+  \iffcfmbeamer@fonts
+    \RequirePackage{ifthen}
+    \RequirePackage{ifxetex}
+    \RequirePackage{ifluatex}
+    \RequirePackage{lmodern}
+    \RequirePackage[sfdefault,lf]{carlito}
+    \renewcommand*\oldstylenums[1]{{\carlitoOsF #1}}
+
+    %% Load arev with scaling factor of .85
+    %% See <http://tex.stackexchange.com/a/181240/70941>
+    \DeclareFontFamily{OML}{zavm}{\skewchar\font=127 }
+    \DeclareFontShape{OML}{zavm}{m}{it}{<-> s*[.85] zavmri7m}{}
+    \DeclareFontShape{OML}{zavm}{b}{it}{<-> s*[.85] zavmbi7m}{}
+    \DeclareFontShape{OML}{zavm}{m}{sl}{<->ssub * zavm/m/it}{}
+    \DeclareFontShape{OML}{zavm}{bx}{it}{<->ssub * zavm/b/it}{}
+    \DeclareFontShape{OML}{zavm}{b}{sl}{<->ssub * zavm/b/it}{}
+    \DeclareFontShape{OML}{zavm}{bx}{sl}{<->ssub * zavm/b/sl}{}
+
+    \AtBeginDocument{
+      \SetSymbolFont{operators}   {normal}{OT1}{zavm}{m}{n}
+      \SetSymbolFont{letters}     {normal}{OML}{zavm}{m}{it}
+      \SetSymbolFont{symbols}     {normal}{OMS}{zavm}{m}{n}
+      \SetSymbolFont{largesymbols}{normal}{OMX}{iwona}{m}{n}}
+    \RequirePackage[sans]{dsfont}
+
+    \ifthenelse{\boolean{xetex}\OR\boolean{luatex}}{
+      \RequirePackage{fontspec}
+%    \end{macrocode}
+% \changes{v1.1.7}{2017/04/28}{Removed undesirable TeX ligatures from the mono
+%   font. [VN]}
+%    \begin{macrocode}
+      \setmonofont[Scale=0.85]{DejaVu Sans Mono}
+    }{
+      \RequirePackage[scaled=0.85]{DejaVuSansMono}
+      \RequirePackage[resetfonts]{cmap}
+      \RequirePackage[T1]{fontenc}
+    }
+    \RequirePackage{setspace}
+    \setstretch{1.15}
+  \fi
+\mode
+  <all>
+%    \end{macrocode}
+% Finally, the color, font, inner and outer themes of the
+% respective university and faculty will be loaded.
+%    \begin{macrocode}
+\fcfmbeamer@requireTheme{color}
+\fcfmbeamer@requireTheme{font}
+\fcfmbeamer@requireTheme{inner}
+\fcfmbeamer@requireTheme{outer}
+%    \end{macrocode}
+%
+% \section{Themes}
+% This section contains the combined documentation of all available
+% themes.  When creating a new theme file, it is advisable to
+% create one self-contained \texttt{dtx} file, which is then
+% partitioned into locale files via the \textsf{docstrip} tool
+% based on the respective \texttt{ins} file. A
+% \DescribeMacro{\file} macro |\file|\marg{filename} is available
+% for the sectioning of the documentation of various files within
+% the \texttt{dtx} file. For more information about \texttt{dtx}
+% files and the \textsf{docstrip} tool, consult the \textsf{dtxtut,
+% docstrip, doc} and \textsf{ltxdoc} manuals.
+%
+% \def\file#1{\subsubsection{The \texttt{#1} file}}
+%
+% \subsection{Base files}
+% \input{theme/uch/base.dtx}
+% \subsection{Facultad de Ciencias Físicas y Matemáticas}
+% \input{theme/uch/fcfm.dtx}
+% \iffalse
+%</class>
+% \fi
